@@ -1,0 +1,17 @@
+---
+import Layout from '../../../../layouts/Layout.astro';
+import MentorRoomApp from '../../../../components/MentorRoomApp.jsx';
+import dummyRoomData from '../../../../data/dummyRoom.json';
+
+export function getStaticPaths() {
+  return Object.keys(dummyRoomData).map((code) => ({
+    params: { slug: code }
+  }));
+}
+
+const { slug } = Astro.params;
+---
+
+<Layout>
+	<MentorRoomApp client:load slug={slug} />
+</Layout>

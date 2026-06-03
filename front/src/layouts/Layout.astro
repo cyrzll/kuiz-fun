@@ -1,0 +1,86 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import "../styles/global.css";
+---
+
+<!doctype html>
+<html lang="id">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Pancasila Fun Quiz - Neobrutalism Edition</title>
+		<!-- Google Fonts: Poppins -->
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&display=swap" rel="stylesheet">
+
+		<!-- SPA Routing via Astro Client Router -->
+		<ClientRouter />
+
+
+		<!-- Inline diagnostic script to catch and display any runtime exceptions -->
+		<script is:inline>
+			window.onerror = function (message, source, lineno, colno, error) {
+				const div = document.createElement('div');
+				div.style.position = 'fixed';
+				div.style.top = '0';
+				div.style.left = '0';
+				div.style.width = '100%';
+				div.style.backgroundColor = '#FF5E8C';
+				div.style.color = '#000000';
+				div.style.padding = '20px';
+				div.style.zIndex = '999999';
+				div.style.borderBottom = '4px solid #000000';
+				div.style.fontFamily = 'monospace';
+				div.style.fontSize = '14px';
+				div.style.fontWeight = 'bold';
+				div.innerHTML = `
+					<h1 style="font-size: 20px; font-weight: 900; margin: 0 0 10px 0; text-transform: uppercase;">🚨 Client-Side Runtime Error</h1>
+					<p style="margin: 4px 0;"><strong>Pesan:</strong> ${message}</p>
+					<p style="margin: 4px 0;"><strong>Sumber:</strong> ${source}:${lineno}:${colno}</p>
+					<pre style="background-color: rgba(0,0,0,0.05); padding: 10px; margin: 10px 0 0 0; border: 2px solid #000; overflow: auto; max-height: 200px;">${error ? error.stack : 'No stack trace available'}</pre>
+				`;
+				document.body.appendChild(div);
+				return false;
+			};
+
+			window.addEventListener('unhandledrejection', function (event) {
+				const div = document.createElement('div');
+				div.style.position = 'fixed';
+				div.style.top = '0';
+				div.style.left = '0';
+				div.style.width = '100%';
+				div.style.backgroundColor = '#FFE600';
+				div.style.color = '#000000';
+				div.style.padding = '20px';
+				div.style.zIndex = '999999';
+				div.style.borderBottom = '4px solid #000000';
+				div.style.fontFamily = 'monospace';
+				div.style.fontSize = '14px';
+				div.style.fontWeight = 'bold';
+				div.innerHTML = `
+					<h1 style="font-size: 20px; font-weight: 900; margin: 0 0 10px 0; text-transform: uppercase;">🚨 Unhandled Promise Rejection</h1>
+					<p style="margin: 4px 0;"><strong>Alasan:</strong> ${event.reason}</p>
+				`;
+				document.body.appendChild(div);
+			});
+		</script>
+	</head>
+	<body class="font-poppins bg-[#FDFBF7] text-[#1A1A1A] selection:bg-[#FFE600] selection:text-black">
+		<slot />
+	</body>
+</html>
+
+
+<style>
+	html,
+	body {
+		margin: 0;
+		width: 100%;
+		min-height: 100%;
+	}
+</style>
+
