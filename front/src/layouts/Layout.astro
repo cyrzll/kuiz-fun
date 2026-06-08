@@ -1,6 +1,16 @@
 ---
 import { ClientRouter } from 'astro:transitions';
 import "../styles/global.css";
+
+interface Props {
+	title?: string;
+	description?: string;
+}
+
+const { 
+	title = "SilaLearning - Belajar Pancasila Seru & Interaktif", 
+	description = "SilaLearning adalah platform pembelajaran kuis Pancasila interaktif untuk siswa dan guru. Belajar Pancasila secara menyenangkan, mudah, dan real-time."
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -8,10 +18,28 @@ import "../styles/global.css";
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Pancasila Fun Quiz - Neobrutalism Edition</title>
+		
+		<!-- Primary Meta Tags -->
+		<title>{title}</title>
+		<meta name="title" content={title} />
+		<meta name="description" content={description} />
+
+		<!-- Open Graph / Facebook -->
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content="https://silalearning.fun/" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content="https://silalearning.fun/favicon.ico" />
+
+		<!-- Twitter -->
+		<meta property="twitter:card" content="summary" />
+		<meta property="twitter:url" content="https://silalearning.fun/" />
+		<meta property="twitter:title" content={title} />
+		<meta property="twitter:description" content={description} />
+		<meta property="twitter:image" content="https://silalearning.fun/favicon.ico" />
+
 		<!-- Google Fonts: Poppins -->
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,7 +47,6 @@ import "../styles/global.css";
 
 		<!-- SPA Routing via Astro Client Router -->
 		<ClientRouter />
-
 
 		<!-- Inline diagnostic script to catch and display any runtime exceptions -->
 		<script is:inline>
@@ -74,7 +101,6 @@ import "../styles/global.css";
 	</body>
 </html>
 
-
 <style>
 	html,
 	body {
@@ -83,4 +109,3 @@ import "../styles/global.css";
 		min-height: 100%;
 	}
 </style>
-

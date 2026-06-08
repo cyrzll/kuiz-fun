@@ -118,7 +118,7 @@ export default function MainApp() {
                 PANCASILA <span className="bg-neo-yellow px-1 neo-border shadow-sm border-black">FUN QUIZ</span>
               </h1>
               <p className="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-widest mt-0.5">
-                Neobrutalism Interactive Learning Arena
+                SilaLearning Interactive Arena
               </p>
             </div>
           </div>
@@ -157,7 +157,7 @@ export default function MainApp() {
                   🇮🇩 Berdasarkan Nilai Pancasila
                 </h3>
                 <p className="text-xs text-green-950 font-bold leading-relaxed">
-                  Aplikasi ini dirancang dengan gaya Neobrutalism modern untuk pembelajaran Pancasila yang asyik bagi anak-anak sekolah dasar dan menengah.
+                  Aplikasi ini dirancang khusus untuk pembelajaran Pancasila yang asyik, interaktif, dan mudah bagi anak-anak sekolah dasar dan menengah.
                 </p>
               </div>
             </div>

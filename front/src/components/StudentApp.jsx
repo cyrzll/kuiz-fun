@@ -85,7 +85,7 @@ export default function StudentApp() {
                 🇮🇩 Cintai Tanah Air & Pancasila
               </h3>
               <p className="text-xs text-green-950 font-bold leading-relaxed">
-                Asah pemahamanmu tentang simbol, nilai-nilai, dan sejarah Pancasila dengan antarmuka Neobrutalism yang asyik dan menantang!
+                Asah pemahamanmu tentang simbol, nilai-nilai, dan sejarah Pancasila dengan platform kuis interaktif yang asyik dan menantang!
               </p>
             </div>
           </div>
