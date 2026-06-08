@@ -147,8 +147,14 @@ export async function initDb() {
   if (moduleCount && moduleCount.count === 0) {
     console.log('Database empty. Seeding data from dummyRoom.json and dummyModul.json...');
     
-    const dummyModulPath = '/Users/rizal/Documents/tugas/pend pancasila/quiz/front/src/data/dummyModul.json';
-    const dummyRoomPath = '/Users/rizal/Documents/tugas/pend pancasila/quiz/front/src/data/dummyRoom.json';
+    let dummyModulPath = join(__dirname, 'data', 'dummyModul.json');
+    if (!fs.existsSync(dummyModulPath)) {
+      dummyModulPath = join(__dirname, '..', 'src', 'data', 'dummyModul.json');
+    }
+    let dummyRoomPath = join(__dirname, 'data', 'dummyRoom.json');
+    if (!fs.existsSync(dummyRoomPath)) {
+      dummyRoomPath = join(__dirname, '..', 'src', 'data', 'dummyRoom.json');
+    }
 
     if (fs.existsSync(dummyModulPath)) {
       const modulsData = JSON.parse(fs.readFileSync(dummyModulPath, 'utf8'));

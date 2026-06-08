@@ -1,0 +1,23 @@
+{
+  "123456": {
+    "roomCode": "123456",
+    "quizTitle": "Kuis Pancasila Dasar (Sila 1-5)",
+    "modulId": "modul_pancasila_dasar",
+    "mentorName": "Budi Setiawan, S.Pd.",
+    "schoolName": "SD Negeri 1 Merdeka"
+  },
+  "751324": {
+    "roomCode": "751324",
+    "quizTitle": "Gotong Royong & Kewarganegaraan",
+    "modulId": "modul_gotong_royong",
+    "mentorName": "Siti Aminah, M.Pd.",
+    "schoolName": "SD Pancasila Unggul"
+  },
+  "999999": {
+    "roomCode": "999999",
+    "quizTitle": "Sejarah & Perumusan Pancasila",
+    "modulId": "modul_sejarah_pancasila",
+    "mentorName": "Ahmad Fauzi, S.H.",
+    "schoolName": "SMP Merdeka Belajar"
+  }
+}

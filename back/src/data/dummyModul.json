@@ -1,0 +1,220 @@
+{
+  "modul_pancasila_dasar": {
+    "id": "modul_pancasila_dasar",
+    "title": "Pancasila Fun Learning: Sila 1-5",
+    "description": "Pelajari dasar-dasar Pancasila, makna simbol-simbol sila 1 sampai 5 (Bintang, Rantai, Beringin, Banteng, Padi & Kapas), serta penerapan perilakunya dalam kehidupan sehari-hari.",
+    "materials": [
+      {
+        "title": "Apa itu Pancasila? 🇮🇩",
+        "content": "Pancasila berasal dari bahasa Sanskerta: 'Panca' berarti lima dan 'Sila' berarti dasar atau prinsip. Pancasila merupakan fondasi, ideologi, dan pandangan hidup bangsa Indonesia yang dirumuskan oleh para pendiri bangsa kita untuk menyatukan keberagaman dari Sabang sampai Merauke.",
+        "icon": "📚"
+      },
+      {
+        "title": "Sila 1 & Sila 2 dan Contohnya ✨",
+        "content": "1. Sila ke-1: 'Ketuhanan Yang Maha Esa' dilambangkan oleh Bintang Emas. Contoh pengamalannya adalah rajin beribadah dan menghormati teman yang berbeda agama.\n2. Sila ke-2: 'Kemanusiaan yang adil dan beradab' dilambangkan oleh Rantai Emas. Contohnya adalah gemar menolong teman yang kesulitan tanpa membeda-bedakan.",
+        "icon": "⭐"
+      },
+      {
+        "title": "Sila 3, Sila 4 & Sila 5 dan Contohnya 🌳",
+        "content": "3. Sila ke-3: 'Persatuan Indonesia' dilambangkan oleh Pohon Beringin. Contohnya bangga menggunakan barang buatan Indonesia.\n4. Sila ke-4: 'Kerakyatan yang dipimpin oleh...' dilambangkan oleh Kepala Banteng. Contohnya suka bermusyawarah.\n5. Sila ke-5: 'Keadilan sosial bagi...' dilambangkan oleh Padi dan Kapas. Contohnya bersikap hemat dan adil pada sesama.",
+        "icon": "🌾"
+      }
+    ],
+    "questions": [
+      {
+        "id": 1,
+        "question": "Sila ketiga Pancasila, 'Persatuan Indonesia', dilambangkan oleh simbol apa?",
+        "options": [
+          { "key": "A", "text": "Bintang Emas" },
+          { "key": "B", "text": "Pohon Beringin", "isCorrect": true },
+          { "key": "C", "text": "Kepala Banteng" },
+          { "key": "D", "text": "Padi dan Kapas" }
+        ],
+        "explanation": "Pohon Beringin mencerminkan tempat berteduh yang aman bagi seluruh rakyat Indonesia di bawah naungan kesatuan Republik Indonesia."
+      },
+      {
+        "id": 2,
+        "question": "Menghormati hak ibadah pemeluk agama lain dan tidak memaksakan keyakinan kita merupakan wujud pengamalan sila ke-...",
+        "options": [
+          { "key": "A", "text": "Sila ke-1 (Ketuhanan Yang Maha Esa)", "isCorrect": true },
+          { "key": "B", "text": "Sila ke-2 (Kemanusiaan yang adil dan beradab)" },
+          { "key": "C", "text": "Sila ke-3 (Persatuan Indonesia)" },
+          { "key": "D", "text": "Sila ke-5 (Keadilan sosial bagi seluruh rakyat)" }
+        ],
+        "explanation": "Sila pertama mengatur hubungan manusia dengan Tuhan serta toleransi antar umat beragama."
+      },
+      {
+        "id": 3,
+        "question": "Membantu tetangga atau teman yang sedang tertimpa musibah merupakan perwujudan nilai kemanusiaan, yaitu sila ke-...",
+        "options": [
+          { "key": "A", "text": "Sila ke-1 (Ketuhanan Yang Maha Esa)" },
+          { "key": "B", "text": "Sila ke-2 (Kemanusiaan yang adil dan beradab)", "isCorrect": true },
+          { "key": "C", "text": "Sila ke-4 (Kerakyatan yang dipimpin oleh hikmat...)" },
+          { "key": "D", "text": "Sila ke-5 (Keadilan sosial bagi seluruh rakyat)" }
+        ],
+        "explanation": "Sila kedua mengajarkan kita untuk saling mencintai sesama manusia dan gemar melakukan kegiatan kemanusiaan."
+      }
+    ]
+  },
+  "modul_gotong_royong": {
+    "id": "modul_gotong_royong",
+    "title": "Gotong Royong & Kebhinekaan",
+    "description": "Pelajari pentingnya sikap gotong royong, bentuk-bentuk kerja sama di lingkungan rumah dan sekolah, serta bagaimana menghargai keragaman suku dan budaya di Indonesia.",
+    "materials": [
+      {
+        "title": "Indahnya Gotong Royong 🤝",
+        "content": "Gotong royong adalah bekerja bersama-sama untuk menyelesaikan suatu pekerjaan demi kepentingan bersama. Nilai gotong royong merupakan ciri khas kepribadian bangsa Indonesia yang mencerminkan kekeluargaan dan kepedulian sosial yang tinggi.",
+        "icon": "🤝"
+      },
+      {
+        "title": "Penerapan di Sekolah & Rumah 🏫",
+        "content": "Di sekolah, gotong royong bisa berupa piket kelas bersama, kerja bakti membersihkan perpustakaan, atau kerja kelompok menyelesaikan tugas belajar. Di lingkungan rumah, contohnya adalah ikut membersihkan saluran air (selokan) bersama warga atau membantu mempersiapkan hajatan tetangga.",
+        "icon": "🏡"
+      }
+    ],
+    "questions": [
+      {
+        "id": 1,
+        "question": "Manfaat utama dari membiasakan sikap gotong royong di lingkungan sekolah adalah...",
+        "options": [
+          { "key": "A", "text": "Pekerjaan cepat selesai dan memupuk rasa persaudaraan", "isCorrect": true },
+          { "key": "B", "text": "Mendapatkan uang saku tambahan dari guru" },
+          { "key": "C", "text": "Bisa pulang sekolah lebih awal dari kelas lain" },
+          { "key": "D", "text": "Menghindari pelajaran matematika di kelas" }
+        ],
+        "explanation": "Gotong royong meringankan beban pekerjaan dan mempererat tali persatuan antar siswa."
+      },
+      {
+        "id": 2,
+        "question": "Sikap yang kurang mendukung terciptanya gotong royong di lingkungan masyarakat adalah...",
+        "options": [
+          { "key": "A", "text": "Peduli terhadap kesulitan tetangga sekitar" },
+          { "key": "B", "text": "Menolak ikut kerja bakti karena sibuk bermain game", "isCorrect": true },
+          { "key": "C", "text": "Menghargai perbedaan pendapat dalam musyawarah" },
+          { "key": "D", "text": "Membantu tanpa mengharap imbalan apa pun" }
+        ],
+        "explanation": "Sikap individualistis dan mengutamakan kesenangan pribadi merusak nilai kebersamaan gotong royong."
+      }
+    ]
+  },
+  "modul_sejarah_pancasila": {
+    "id": "modul_sejarah_pancasila",
+    "title": "Sejarah & Perumusan Pancasila",
+    "description": "Telusuri sejarah penting bagaimana Pancasila dirumuskan, mulai dari sidang BPUPKI, pidato lahirnya istilah Pancasila, hasil kerja Panitia Sembilan, hingga pengesahan finalnya.",
+    "materials": [
+      {
+        "title": "Sidang BPUPKI & Lahirnya Pancasila 📅",
+        "content": "BPUPKI (Badan Penyelidik Usaha-usaha Persiapan Kemerdekaan Indonesia) mengadakan sidang pertama pada 29 Mei - 1 Juni 1945 untuk merumuskan dasar negara. Pada tanggal 1 Juni 1945, Ir. Soekarno menyampaikan pidatonya tentang gagasan lima dasar negara yang diberi nama Pancasila. Tanggal inilah yang kini kita peringati sebagai Hari Lahir Pancasila.",
+        "icon": "📜"
+      },
+      {
+        "title": "Mufakat Panitia Sembilan ✒️",
+        "content": "Setelah sidang BPUPKI, dibentuk Panitia Sembilan untuk mematangkan rumusan dasar negara. Pada 22 Juni 1945, mereka menyepakati Piagam Jakarta (Jakarta Charter). Setelah mengalami perubahan pada sila pertama demi persatuan bangsa, Pancasila disahkan secara hukum pada 18 Agustus 1945 oleh PPKI.",
+        "icon": "✍️"
+      }
+    ],
+    "questions": [
+      {
+        "id": 1,
+        "question": "Siapakah tokoh bangsa yang memperkenalkan istilah 'Pancasila' pada tanggal 1 Juni 1945?",
+        "options": [
+          { "key": "A", "text": "Drs. Mohammad Hatta" },
+          { "key": "B", "text": "Ir. Soekarno", "isCorrect": true },
+          { "key": "C", "text": "Mr. Muhammad Yamin" },
+          { "key": "D", "text": "Prof. Dr. Soepomo" }
+        ],
+        "explanation": "Ir. Soekarno menyampaikan pidato tentang lima asas dasar negara yang ia usulkan bernama Pancasila pada 1 Juni 1945."
+      },
+      {
+        "id": 2,
+        "question": "Kapan rumusan final Pancasila yang sah dan legal sebagai dasar negara diresmikan oleh PPKI?",
+        "options": [
+          { "key": "A", "text": "1 Juni 1945" },
+          { "key": "B", "text": "22 Juni 1945" },
+          { "key": "C", "text": "17 Agustus 1945" },
+          { "key": "D", "text": "18 Agustus 1945", "isCorrect": true }
+        ],
+        "explanation": "Pada 18 Agustus 1945 (satu hari setelah Proklamasi), PPKI menetapkan UUD 1945 yang di dalam pembukaannya tercantum rumusan sah Pancasila."
+      }
+    ]
+  },
+  "modul_norma_hak_kewajiban": {
+    "id": "modul_norma_hak_kewajiban",
+    "title": "Norma, Hak, & Kewajiban Kelas 6",
+    "description": "Pelajari pengertian dan jenis-jenis norma di masyarakat (kesopanan, agama, kesusilaan, hukum), serta bagaimana menyeimbangkan hak dan kewajiban sebagai anak dan warga negara.",
+    "materials": [
+      {
+        "title": "Mengenal Norma di Masyarakat 📜",
+        "content": "Norma adalah aturan atau ketentuan yang mengikat warga kelompok atau warga komunitas dalam masyarakat. Tujuannya adalah menciptakan ketertiban, keteraturan, kedamaian, dan mencegah terjadinya konflik. Norma diajarkan dari generasi ke generasi agar kerukunan tetap terjaga.",
+        "icon": "📜"
+      },
+      {
+        "title": "Empat Jenis Norma & Contohnya ⚖️",
+        "content": "1. Norma Kesopanan: bersumber dari kebiasaan sehari-hari (tata krama, berpakaian, berbicara santun). Sanksinya berupa celaan atau dikucilkan.\n2. Norma Agama: bersumber dari kitan suci/Tuhan. Sanksinya berupa dosa.\n3. Norma Kesusilaan: bersumber dari hati nurani (kejujuran, empati, tahu berterima kasih). Sanksinya berupa penyesalan dan rasa bersalah.\n4. Norma Hukum: dibuat oleh pemerintah dan DPR. Bersifat mengikat, tegas, dan memaksa. Sanksinya berupa hukuman penjara, denda, atau pencabutan hak.",
+        "icon": "⚖️"
+      },
+      {
+        "title": "Hak & Kewajiban Anak secara Seimbang 🎒",
+        "content": "Hak adalah sesuatu yang harus kita terima, sedangkan kewajiban adalah sesuatu yang harus kita lakukan dengan penuh tanggung jawab. Kewajiban anak dibagi menjadi tiga kelompok: menjaga diri (keselamatan, kesehatan, disiplin belajar), menjaga lingkungan (kebersihan rumah/sekolah), dan saling menjaga dengan teman agar terhindar dari perundungan (bullying) atau kekerasan.",
+        "icon": "🎒"
+      }
+    ],
+    "questions": [
+      {
+        "id": 1,
+        "question": "Aturan yang mengatur tata krama atau tingkah laku dalam masyarakat yang bersumber dari kebiasaan sehari-hari disebut...",
+        "options": [
+          { "key": "A", "text": "Norma Agama" },
+          { "key": "B", "text": "Norma Kesopanan", "isCorrect": true },
+          { "key": "C", "text": "Norma Kesusilaan" },
+          { "key": "D", "text": "Norma Hukum" }
+        ],
+        "explanation": "Norma kesopanan bersumber dari kebiasaan sehari-hari dan mengatur kesantunan bertingkah laku dalam masyarakat."
+      },
+      {
+        "id": 2,
+        "question": "Jika seseorang berbohong atau menolak menolong sesama yang membutuhkan, ia akan merasa bersalah, cemas, dan menyesal. Ini adalah bentuk sanksi dari pelanggaran...",
+        "options": [
+          { "key": "A", "text": "Norma Hukum" },
+          { "key": "B", "text": "Norma Kesopanan" },
+          { "key": "C", "text": "Norma Kesusilaan", "isCorrect": true },
+          { "key": "D", "text": "Norma Agama" }
+        ],
+        "explanation": "Sanksi pelanggaran norma kesusilaan datang dari dalam diri sendiri berupa rasa bersalah, malu, dan menyesal karena melanggar suara hati nurani."
+      },
+      {
+        "id": 3,
+        "question": "Menaati rambu lalu lintas, larangan melakukan korupsi, serta kewajiban membayar pajak merupakan contoh penerapan dari...",
+        "options": [
+          { "key": "A", "text": "Norma Hukum", "isCorrect": true },
+          { "key": "B", "text": "Norma Kesusilaan" },
+          { "key": "C", "text": "Norma Agama" },
+          { "key": "D", "text": "Norma Kesopanan" }
+        ],
+        "explanation": "Aturan tertulis resmi yang dibuat oleh pemerintah/negara dan memiliki sanksi hukum yang tegas dan memaksa merupakan ciri norma hukum."
+      },
+      {
+        "id": 4,
+        "question": "Manakah di bawah ini yang merupakan contoh dari kewajiban anak terhadap dirinya sendiri (menjaga diri)?",
+        "options": [
+          { "key": "A", "text": "Menyapu halaman rumah bersama kakak" },
+          { "key": "B", "text": "Membantu teman merapikan buku di perpustakaan" },
+          { "key": "C", "text": "Berhati-hati di jalan dan disiplin belajar", "isCorrect": true },
+          { "key": "D", "text": "Menuntut mendapatkan uang jajan yang banyak" }
+        ],
+        "explanation": "Kewajiban anak menjaga diri sendiri meliputi menjaga keselamatan (berhati-hati di jalan), menjaga kesehatan, serta memiliki disiplin diri dalam belajar."
+      },
+      {
+        "id": 5,
+        "question": "Sikap disiplin diri (self-discipline) menurut nasihat Ki Hadjar Dewantara sangat penting karena...",
+        "options": [
+          { "key": "A", "text": "Tanpa disiplin diri, aturan hukum tidak akan mempan" },
+          { "key": "B", "text": "Disiplin diri berarti kita sendiri yang mewajibkannya dengan sekeras-kerasnya", "isCorrect": true },
+          { "key": "C", "text": "Disiplin diri hanya dilakukan agar mendapat pujian dari guru" },
+          { "key": "D", "text": "Disiplin diri membuat anak menjadi terkekang dan tidak merdeka" }
+        ],
+        "explanation": "Ki Hadjar Dewantara menasihati bahwa disiplin diri (self-discipline) adalah kemampuan mewajibkan diri sendiri melakukan hal baik secara sungguh-sungguh demi kemerdekaan sejati."
+      }
+    ]
+  }
+}
