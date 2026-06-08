@@ -54,7 +54,7 @@ export default function QuizLobby({
           const res = await fetch(getBackendUrl(`/api/rooms/${roomCode}/students`));
           const data = await res.json();
           if (Array.isArray(data)) {
-            setLocalStudents(data.map(s => s.name));
+            setLocalStudents(data);
           }
         } catch (err) {
           console.error('Error fetching students:', err);
@@ -74,8 +74,8 @@ export default function QuizLobby({
     setStudentName(nameInput);
     setIsNameSubmitted(true);
     setLocalStudents((prev) => {
-      if (prev.includes(nameInput)) return prev;
-      return [...prev, nameInput];
+      if (prev.some(s => (s.name || s) === nameInput)) return prev;
+      return [...prev, { name: nameInput, avatar: 'profil-1.webp' }];
     });
   };
 
@@ -192,19 +192,25 @@ export default function QuizLobby({
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               {students.map((student, idx) => {
                 const colorClass = COLORS[idx % COLORS.length];
-                const isMe = student === nameInput;
+                const studentNameVal = student.name || student;
+                const studentAvatarVal = student.avatar || 'profil-1.webp';
+                const isMe = studentNameVal === nameInput || studentNameVal === studentName;
                 return (
                   <div
-                    key={student}
-                    className={`neo-box ${colorClass} p-3.5 flex items-center justify-between font-black uppercase tracking-tight text-sm text-center relative hover:scale-102 transition-transform animate-fadeIn`}
+                    key={studentNameVal}
+                    className={`neo-box ${colorClass} p-3 flex items-center gap-2.5 font-black uppercase tracking-tight text-xs sm:text-sm relative hover:scale-102 transition-transform animate-fadeIn`}
                   >
-                    <span className="truncate">{student}</span>
+                    <img
+                      src={getBackendUrl(`/api/media/${studentAvatarVal}`)}
+                      alt="Avatar"
+                      className="w-8 h-8 rounded-full border-2 border-black object-cover bg-white shrink-0"
+                    />
+                    <span className="truncate">{studentNameVal}</span>
                     {isMe && (
                       <span className="absolute -top-2.5 -left-2 bg-black text-white text-[8px] font-black px-1.5 py-0.5 uppercase tracking-wider neo-border shadow-sm">
                         SAYA
                       </span>
                     )}
-                    <span>⚡</span>
                   </div>
                 );
               })}

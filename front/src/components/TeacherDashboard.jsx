@@ -1,33 +1,147 @@
-import React, { useState } from 'react';
-
-const INITIAL_QUIZZES = [
-  { id: '1', title: 'Pancasila Fun Learning: Sila 1-5', questions: 5, category: 'Civics', difficulty: 'Mudah' },
-  { id: '2', title: 'Gotong Royong & Kebhinekaan', questions: 8, category: 'Civics', difficulty: 'Sedang' },
-  { id: '3', title: 'Sejarah Lahirnya Pancasila', questions: 10, category: 'Sejarah', difficulty: 'Sulit' },
-  { id: '4', title: 'Norma, Hak, & Kewajiban Kelas 6', questions: 5, category: 'Civics', difficulty: 'Sedang' }
-];
+import React, { useState, useEffect } from 'react';
+import { getBackendUrl } from '../utils/api';
+import NeoModal from './NeoModal';
 
 export default function TeacherDashboard({ user, onLogout, onLaunchLobby }) {
-  const [quizzes, setQuizzes] = useState(INITIAL_QUIZZES);
-  const [newTitle, setNewTitle] = useState('');
-  const [newQuestionsCount, setNewQuestionsCount] = useState(5);
-  const [showAddForm, setShowAddForm] = useState(false);
+  const [quizzes, setQuizzes] = useState([]);
+  const [roomHistory, setRoomHistory] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  // Expanded room codes state for session history accordion
+  const [expandedRooms, setExpandedRooms] = useState({});
 
-  const handleCreateQuiz = (e) => {
-    e.preventDefault();
-    if (!newTitle.trim()) return;
+  // NeoModal state for delete confirmation and notices
+  const [modal, setModal] = useState({ isOpen: false, title: '', message: '', type: 'info', icon: '⚠️', onConfirm: null });
+  const showModal = (opts) => setModal({ isOpen: true, ...opts });
+  const closeModal = () => setModal(prev => ({ ...prev, isOpen: false, onConfirm: null }));
 
-    const newQuiz = {
-      id: String(quizzes.length + 1),
-      title: newTitle,
-      questions: parseInt(newQuestionsCount),
-      category: 'Pancasila Custom',
-      difficulty: 'Sedang'
-    };
+  const fetchData = async () => {
+    try {
+      // Fetch Quizzes
+      const quizRes = await fetch(getBackendUrl('/api/modules'));
+      if (!quizRes.ok) throw new Error('Gagal mengambil data kuis');
+      const quizData = await quizRes.json();
+      
+      const quizList = Object.values(quizData).map((m) => {
+        let difficulty = 'Mudah';
+        let category = 'Civics';
+        
+        if (m.questions.length > 8) {
+          difficulty = 'Sulit';
+          category = 'Sejarah';
+        } else if (m.questions.length > 5) {
+          difficulty = 'Sedang';
+          category = 'Pancasila';
+        }
 
-    setQuizzes([newQuiz, ...quizzes]);
-    setNewTitle('');
-    setShowAddForm(false);
+        const isSeeded = ['modul_pancasila_dasar', 'modul_gotong_royong', 'modul_sejarah_pancasila', 'modul_norma_hak_kewajiban'].includes(m.id);
+        if (isSeeded) {
+          if (m.id === 'modul_pancasila_dasar') { difficulty = 'Mudah'; category = 'Civics'; }
+          else if (m.id === 'modul_gotong_royong') { difficulty = 'Sedang'; category = 'Civics'; }
+          else if (m.id === 'modul_sejarah_pancasila') { difficulty = 'Sulit'; category = 'Sejarah'; }
+          else if (m.id === 'modul_norma_hak_kewajiban') { difficulty = 'Sedang'; category = 'Civics'; }
+        } else {
+          category = 'Custom';
+        }
+
+        return {
+          id: m.id,
+          title: m.title,
+          questions: m.questions.length,
+          category,
+          difficulty,
+          description: m.description,
+          isSeeded
+        };
+      });
+
+      setQuizzes(quizList);
+
+      // Fetch Room History (Session History)
+      const roomRes = await fetch(getBackendUrl('/api/rooms'));
+      if (!roomRes.ok) throw new Error('Gagal mengambil riwayat sesi');
+      const roomData = await roomRes.json();
+      setRoomHistory(roomData);
+
+    } catch (err) {
+      console.error('Failed to fetch data:', err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleConfirmDelete = (quiz) => {
+    showModal({
+      title: 'Hapus Kuis?',
+      message: `Apakah Anda yakin ingin menghapus kuis "${quiz.title}"? Tindakan ini bersifat permanen dan seluruh data soal serta slide materi akan terhapus.`,
+      type: 'warning',
+      icon: '🗑️',
+      confirmText: 'YA, HAPUS',
+      cancelText: 'BATAL',
+      onConfirm: async () => {
+        closeModal();
+        setLoading(true);
+        try {
+          const res = await fetch(getBackendUrl(`/api/modules/${quiz.id}`), {
+            method: 'DELETE'
+          });
+          const data = await res.json();
+          if (!res.ok || data.error) {
+            throw new Error(data.error || 'Gagal menghapus kuis');
+          }
+          
+          showModal({
+            title: 'Kuis Dihapus',
+            message: 'Kuis kustom Anda berhasil dihapus secara permanen dari database.',
+            type: 'success',
+            icon: '✅'
+          });
+          
+          // Refresh lists
+          await fetchData();
+        } catch (err) {
+          console.error(err);
+          showModal({
+            title: 'Gagal Menghapus',
+            message: err.message,
+            type: 'error',
+            icon: '❌'
+          });
+          setLoading(false);
+        }
+      }
+    });
+  };
+
+  const toggleExpandRoom = (roomCode) => {
+    setExpandedRooms(prev => ({
+      ...prev,
+      [roomCode]: !prev[roomCode]
+    }));
+  };
+
+  const formatDate = (dateStr) => {
+    if (!dateStr) return '-';
+    try {
+      const date = new Date(dateStr);
+      // SQLite datetime returns in UTC/Local. Format cleanly:
+      return date.toLocaleDateString('id-ID', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    } catch (e) {
+      return dateStr;
+    }
   };
 
   return (
@@ -54,12 +168,22 @@ export default function TeacherDashboard({ user, onLogout, onLaunchLobby }) {
         </button>
       </div>
 
-      {/* Stats Card */}
-      <div className="neo-box bg-[#E6FFFA] p-6 max-w-xs">
-        <p className="text-xs uppercase font-extrabold tracking-wider text-gray-700">Total Kuis Aktif</p>
-        <div className="flex items-baseline gap-2 mt-2">
-          <span className="text-4xl font-black">{quizzes.length}</span>
-          <span className="text-xs font-bold text-teal-800">Kuis Siap Pakai</span>
+      {/* Stats Cards */}
+      <div className="flex flex-wrap gap-4">
+        <div className="neo-box bg-[#E6FFFA] p-6 min-w-[200px] flex-1 sm:flex-none">
+          <p className="text-xs uppercase font-extrabold tracking-wider text-gray-700">Total Kuis Aktif</p>
+          <div className="flex items-baseline gap-2 mt-2">
+            <span className="text-4xl font-black">{loading ? '...' : quizzes.length}</span>
+            <span className="text-xs font-bold text-teal-800">Kuis Siap Pakai</span>
+          </div>
+        </div>
+
+        <div className="neo-box bg-[#EBF4F6] p-6 min-w-[200px] flex-1 sm:flex-none">
+          <p className="text-xs uppercase font-extrabold tracking-wider text-gray-700">Total Sesi Kuis</p>
+          <div className="flex items-baseline gap-2 mt-2">
+            <span className="text-4xl font-black">{loading ? '...' : roomHistory.length}</span>
+            <span className="text-xs font-bold text-blue-800">Sesi Kuis Dibuat</span>
+          </div>
         </div>
       </div>
 
@@ -70,83 +194,88 @@ export default function TeacherDashboard({ user, onLogout, onLaunchLobby }) {
             <h2 className="text-2xl font-black uppercase tracking-tight">
               📂 Daftar Kuis Pancasila
             </h2>
-            <button
-              onClick={() => setShowAddForm(!showAddForm)}
+            <a
+              href="/mentor/quiz/create"
               className="neo-btn bg-neo-green text-white px-4 py-2 text-xs"
             >
-              {showAddForm ? 'BATALKAN' : 'BUAT KUIS BARU +'}
-            </button>
+              BUAT KUIS BARU +
+            </a>
           </div>
 
-          {showAddForm && (
-            <form onSubmit={handleCreateQuiz} className="neo-box bg-[#FAF6EE] p-5 space-y-4 animate-fadeIn">
-              <h3 className="font-extrabold uppercase text-sm border-b-[2px] border-black pb-2">
-                ⚙️ Parameter Kuis Baru
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label className="block text-xs uppercase font-extrabold text-black">Judul Kuis</label>
-                  <input
-                    type="text"
-                    required
-                    value={newTitle}
-                    onChange={(e) => setNewTitle(e.target.value)}
-                    placeholder="Contoh: Kuis Gotong Royong Kelas 5"
-                    className="w-full p-2.5 rounded-none neo-input bg-white text-base sm:text-sm"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <label className="block text-xs uppercase font-extrabold text-black">Jumlah Pertanyaan</label>
-                  <select
-                    value={newQuestionsCount}
-                    onChange={(e) => setNewQuestionsCount(e.target.value)}
-                    className="w-full p-2.5 rounded-none neo-input bg-white text-base sm:text-sm"
-                  >
-                    <option value={5}>5 Pertanyaan</option>
-                    <option value={10}>10 Pertanyaan</option>
-                    <option value={15}>15 Pertanyaan</option>
-                  </select>
-                </div>
-              </div>
-              <button type="submit" className="w-full py-2.5 neo-btn bg-neo-yellow text-black text-xs">
-                SIMPAN KAMPANYE KUIS BARU
-              </button>
-            </form>
-          )}
-
-          <div className="space-y-4">
-            {quizzes.map((quiz) => (
-              <div
-                key={quiz.id}
-                className="neo-box bg-white p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:translate-x-1 transition-all"
-              >
-                <div>
-                  <div className="flex gap-2 mb-1.5 flex-wrap">
-                    <span className="bg-neo-yellow/20 text-yellow-800 text-[10px] font-black px-2 py-0.5 uppercase tracking-wide neo-border border-yellow-800 shadow-sm rounded-none">
-                      {quiz.category}
-                    </span>
-                    <span className="bg-neo-pink/20 text-red-800 text-[10px] font-black px-2 py-0.5 uppercase tracking-wide neo-border border-red-800 shadow-sm rounded-none">
-                      {quiz.difficulty}
-                    </span>
+          {loading ? (
+            <div className="neo-box bg-white p-8 text-center space-y-3">
+              <svg className="animate-spin h-6 w-6 text-neo-blue mx-auto" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+              </svg>
+              <p className="text-xs font-bold text-gray-500">Memuat data kuis dari server...</p>
+            </div>
+          ) : error ? (
+            <div className="neo-box bg-neo-pink/10 p-6 text-center border-neo-pink">
+              <span className="text-2xl">⚠️</span>
+              <p className="text-sm font-bold text-red-800 mt-2">{error}</p>
+            </div>
+          ) : quizzes.length === 0 ? (
+            <div className="neo-box bg-white p-8 text-center">
+              <span className="text-4xl">📂</span>
+              <p className="text-sm font-bold text-gray-500 mt-2">Belum ada kuis yang terdaftar.</p>
+              <p className="text-xs text-gray-400 mt-1">Gunakan tombol di atas untuk membuat kuis baru!</p>
+            </div>
+          ) : (
+            <div className="space-y-4 animate-fadeIn">
+              {quizzes.map((quiz) => (
+                <div
+                  key={quiz.id}
+                  className="neo-box bg-white p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:translate-x-1 transition-all"
+                >
+                  <div className="flex-1 min-w-0">
+                    <div className="flex gap-2 mb-1.5 flex-wrap">
+                      <span className="bg-neo-yellow/20 text-yellow-800 text-[10px] font-black px-2 py-0.5 uppercase tracking-wide neo-border border-yellow-800 shadow-sm rounded-none">
+                        {quiz.category}
+                      </span>
+                      <span className="bg-neo-pink/20 text-red-800 text-[10px] font-black px-2 py-0.5 uppercase tracking-wide neo-border border-red-800 shadow-sm rounded-none">
+                        {quiz.difficulty}
+                      </span>
+                    </div>
+                    <h3 className="text-lg font-black uppercase text-black">{quiz.title}</h3>
+                    <p className="text-gray-600 text-xs mt-0.5 font-medium truncate">
+                      Total: <strong className="text-black">{quiz.questions} Soal</strong> | {quiz.description || 'Berbasis Standar Kurikulum Merdeka'}
+                    </p>
                   </div>
-                  <h3 className="text-lg font-black uppercase text-black">{quiz.title}</h3>
-                  <p className="text-gray-600 text-xs mt-0.5 font-medium">
-                    Total: <strong className="text-black">{quiz.questions} Soal</strong> | Berbasis Standar Kurikulum Merdeka
-                  </p>
-                </div>
 
-                <div className="flex gap-2 w-full sm:w-auto">
-                  <button
-                    onClick={() => onLaunchLobby(quiz)}
-                    className="flex-1 sm:flex-none neo-btn bg-neo-green text-white px-5 py-3 text-sm flex items-center justify-center gap-2"
-                  >
-                    <span>MULAI ROOM</span>
-                    <span>🚀</span>
-                  </button>
+                  <div className="flex flex-wrap sm:flex-nowrap gap-2 w-full sm:w-auto shrink-0">
+                    {/* Only allow editing and deleting on custom quizzes */}
+                    {!quiz.isSeeded && (
+                      <>
+                        <a
+                          href={`/mentor/quiz/edit/${quiz.id}`}
+                          className="flex-1 sm:flex-none neo-btn bg-white text-black px-3.5 py-3 text-xs font-black"
+                          title="Edit Kuis"
+                        >
+                          ✏️ EDIT
+                        </a>
+                        <button
+                          type="button"
+                          onClick={() => handleConfirmDelete(quiz)}
+                          className="flex-1 sm:flex-none neo-btn bg-neo-pink text-white px-3.5 py-3 text-xs font-black"
+                          title="Hapus Kuis"
+                        >
+                          🗑️ HAPUS
+                        </button>
+                      </>
+                    )}
+                    <button
+                      onClick={() => onLaunchLobby(quiz)}
+                      className="flex-2 sm:flex-none neo-btn bg-neo-green text-white px-5 py-3 text-sm flex items-center justify-center gap-2"
+                    >
+                      <span>MULAI ROOM</span>
+                      <span>🚀</span>
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Right Side: Quick Info Panel */}
@@ -189,6 +318,139 @@ export default function TeacherDashboard({ user, onLogout, onLaunchLobby }) {
           </div>
         </div>
       </div>
+
+      {/* Full Width Bottom: Session History */}
+      <div className="space-y-6">
+        <h2 className="text-2xl font-black uppercase tracking-tight">
+          📊 Riwayat Sesi & Aktivitas Siswa
+        </h2>
+
+        {loading ? (
+          <div className="neo-box bg-white p-8 text-center">
+            <p className="text-xs font-bold text-gray-500">Memuat riwayat sesi...</p>
+          </div>
+        ) : roomHistory.length === 0 ? (
+          <div className="neo-box bg-white p-6 text-center">
+            <span className="text-3xl">📊</span>
+            <p className="text-sm font-bold text-gray-500 mt-2">Belum ada riwayat aktivitas pengerjaan kuis.</p>
+            <p className="text-xs text-gray-400 mt-1">Sesi baru akan terdaftar otomatis di sini setelah Anda membuka room kuis.</p>
+          </div>
+        ) : (
+          <div className="space-y-4 animate-fadeIn">
+            {roomHistory.map((session) => {
+              const isExpanded = !!expandedRooms[session.roomCode];
+              const totalFinished = session.students.filter(s => s.is_finished === 1).length;
+              
+              return (
+                <div key={session.roomCode} className="neo-box bg-white overflow-hidden transition-all">
+                  {/* Session Summary Card Header */}
+                  <div 
+                    onClick={() => toggleExpandRoom(session.roomCode)}
+                    className="p-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white hover:bg-gray-50 cursor-pointer select-none transition-colors border-b-3 border-transparent"
+                    style={{ borderBottomColor: isExpanded ? '#000000' : 'transparent' }}
+                  >
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="bg-neo-purple text-white text-xs font-black px-2.5 py-0.5 neo-border shadow-sm">
+                          ROOM: {session.roomCode}
+                        </span>
+                        <span className={`text-[10px] font-black px-2 py-0.5 neo-border uppercase ${
+                          session.status === 'lobby' ? 'bg-neo-yellow text-black' : 
+                          session.status === 'active' ? 'bg-neo-blue text-white' : 'bg-gray-200 text-gray-600'
+                        }`}>
+                          {session.status === 'lobby' ? 'Lobby' : session.status === 'active' ? 'Sesi Aktif' : 'Selesai / Ditutup'}
+                        </span>
+                      </div>
+                      <h3 className="text-lg font-black uppercase text-black">{session.quizTitle}</h3>
+                      <p className="text-[11px] text-gray-500 font-bold uppercase">
+                        📅 Dibuat: {formatDate(session.createdAt)}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
+                      <div className="text-right">
+                        <p className="text-xs text-gray-700 font-extrabold uppercase">
+                          👥 Partisipan: <strong className="text-black">{session.students.length} Siswa</strong>
+                        </p>
+                        <p className="text-[10px] text-gray-500 font-bold">
+                          🏁 Selesai: {totalFinished} dari {session.students.length}
+                        </p>
+                      </div>
+                      <span className="text-xl font-bold bg-gray-100 p-2 neo-border">
+                        {isExpanded ? '▲' : '▼'}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Expanded Participant List */}
+                  {isExpanded && (
+                    <div className="bg-[#FAF6EE] p-5 animate-fadeIn border-t border-black/10">
+                      <h4 className="font-extrabold uppercase text-xs text-gray-700 border-b border-black/10 pb-2 mb-3">
+                        📋 Daftar Siswa yang Mengerjakan ({session.students.length} Partisipan)
+                      </h4>
+
+                      {session.students.length === 0 ? (
+                        <p className="text-xs font-bold text-gray-400 italic text-center py-4">
+                          Belum ada siswa yang masuk ke room ini.
+                        </p>
+                      ) : (
+                        <div className="overflow-x-auto">
+                          <table className="w-full text-left border-collapse">
+                            <thead>
+                              <tr className="border-b-2 border-black text-xs font-black uppercase text-gray-700 bg-white/40">
+                                <th className="p-3 w-12 text-center">Avatar</th>
+                                <th className="p-3">Nama Siswa</th>
+                                <th className="p-3">Skor Akhir</th>
+                                <th className="p-3 w-40 text-center">Status</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {session.students.map((student, sIdx) => (
+                                <tr key={sIdx} className="border-b border-black/10 hover:bg-white/20 text-xs font-bold text-black">
+                                  <td className="p-2 text-center">
+                                    <img
+                                      src={getBackendUrl('/api/media/' + (student.avatar || 'profil-1.webp'))}
+                                      alt={student.name}
+                                      className="w-8 h-8 rounded-full border-2 border-black mx-auto bg-white shadow-sm"
+                                    />
+                                  </td>
+                                  <td className="p-3 font-extrabold uppercase">{student.name}</td>
+                                  <td className="p-3 text-base font-black text-neo-purple">
+                                    🏆 {student.score || 0} Poin
+                                  </td>
+                                  <td className="p-3 text-center">
+                                    <span className={`inline-block px-2.5 py-1 text-[10px] font-black uppercase neo-border shadow-sm ${
+                                      student.is_finished === 1 ? 'bg-neo-green/20 text-green-800 border-green-800' : 'bg-neo-pink/20 text-red-800 border-red-800'
+                                    }`}>
+                                      {student.is_finished === 1 ? 'Selesai' : 'Mengerjakan'}
+                                    </span>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
+      {/* NeoModal for alerts */}
+      <NeoModal
+        isOpen={modal.isOpen}
+        onClose={closeModal}
+        title={modal.title}
+        message={modal.message}
+        type={modal.type}
+        icon={modal.icon}
+        onConfirm={modal.onConfirm}
+        confirmText={modal.confirmText || 'MENGERTI'}
+      />
     </div>
   );
 }

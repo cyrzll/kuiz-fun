@@ -32,6 +32,7 @@ export default function GameFlowApp({ slug }) {
   const [modulesData, setModulesData] = useState({});
 
   const [studentName, setStudentName] = useState('');
+  const [selectedAvatar, setSelectedAvatar] = useState('profil-1.webp');
   const [nameInput, setNameInput] = useState('');
   const [isNameSubmitted, setIsNameSubmitted] = useState(false);
   const [step, setStep] = useState('intro'); // 'intro', 'lobby', 'select-module', 'materials', 'quiz', 'finished'
@@ -108,6 +109,7 @@ export default function GameFlowApp({ slug }) {
           if (meRes.status === 200) {
             const meData = await meRes.json();
             setStudentName(meData.name);
+            setSelectedAvatar(meData.avatar || 'profil-1.webp');
             setIsNameSubmitted(true);
             if (roomData.status === 'lobby' && meData.step !== 'finished') {
               setStep('lobby');
@@ -355,7 +357,7 @@ export default function GameFlowApp({ slug }) {
       const res = await fetch(getBackendUrl('/api/rooms/join'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ roomCode, name: nameInput })
+        body: JSON.stringify({ roomCode, name: nameInput, avatar: selectedAvatar })
       });
       const data = await res.json();
       if (data.error) {
@@ -370,6 +372,7 @@ export default function GameFlowApp({ slug }) {
 
       localStorage.setItem(`quiz_student_token_${roomCode}`, data.token);
       setStudentName(data.student.name);
+      setSelectedAvatar(data.student.avatar || 'profil-1.webp');
       setIsNameSubmitted(true);
 
       connectWebSocket(data.token);
@@ -452,16 +455,28 @@ export default function GameFlowApp({ slug }) {
         
         {/* Brand Header */}
         <header className="flex flex-col sm:flex-row justify-between items-center bg-white neo-box p-4 sm:px-6 sm:py-4 gap-4 animate-fadeIn">
-          <div className="flex items-center gap-3">
-            <span className="text-3xl sm:text-4xl bg-neo-yellow p-1.5 neo-border shadow-sm">🇮🇩</span>
-            <div>
-              <h1 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-black flex items-center gap-1">
-                PANCASILA <span className="bg-neo-yellow px-1 neo-border shadow-sm border-black">FUN LEARNING</span>
-              </h1>
-              <p className="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-widest mt-0.5">
-                Kamar Kelas: {roomCode} | {room.quizTitle}
-              </p>
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+            <div className="flex items-center gap-3">
+              <span className="text-3xl sm:text-4xl bg-neo-yellow p-1.5 neo-border shadow-sm">🇮🇩</span>
+              <div>
+                <h1 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-black flex items-center gap-1">
+                  PANCASILA <span className="bg-neo-yellow px-1 neo-border shadow-sm border-black">FUN LEARNING</span>
+                </h1>
+                <p className="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-widest mt-0.5">
+                  Kamar Kelas: {roomCode} | {room.quizTitle}
+                </p>
+              </div>
             </div>
+            {isNameSubmitted && (
+              <div className="flex items-center gap-2 bg-neo-yellow/10 px-3 py-1.5 neo-border animate-fadeIn">
+                <img
+                  src={getBackendUrl(`/api/media/${selectedAvatar}`)}
+                  alt="Avatar"
+                  className="w-8 h-8 rounded-full border border-black object-cover bg-white"
+                />
+                <span className="text-xs font-black uppercase text-black">{studentName}</span>
+              </div>
+            )}
           </div>
           <button
             onClick={() => {
@@ -491,6 +506,30 @@ export default function GameFlowApp({ slug }) {
             </div>
 
             <form onSubmit={handleNameSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <label className="block text-xs uppercase font-extrabold tracking-wider text-black">
+                  Pilih Avatar Kamu 🦊
+                </label>
+                <div className="flex justify-center gap-2.5 py-1.5">
+                  {['profil-1.webp', 'profil-2.webp', 'profil-3.webp', 'profil-4.webp', 'profil-5.webp'].map((avatar) => (
+                    <button
+                      key={avatar}
+                      type="button"
+                      onClick={() => setSelectedAvatar(avatar)}
+                      className={`w-14 h-14 sm:w-16 sm:h-16 neo-border bg-white overflow-hidden transition-all duration-150 hover:scale-105 active:scale-95 ${
+                        selectedAvatar === avatar ? 'border-[3.5px] border-black ring-4 ring-neo-yellow scale-105 shadow-sm' : 'opacity-60 hover:opacity-100'
+                      }`}
+                    >
+                      <img
+                        src={getBackendUrl(`/api/media/${avatar}`)}
+                        alt="Avatar Option"
+                        className="w-full h-full object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <div className="space-y-1">
                 <label className="block text-xs uppercase font-extrabold tracking-wider text-black">
                   Nama Lengkap Siswa

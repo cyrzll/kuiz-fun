@@ -214,7 +214,7 @@ export default function MentorRoomApp({ slug }) {
             quizTitle={activeQuiz?.title || room?.quizTitle || 'Kuis Kustom'}
             onStartGame={handleStartGame}
             onCancel={handleCancelLobby}
-            students={monitorStudents.map(s => s.name)}
+            students={monitorStudents}
           />
         )}
 
@@ -268,7 +268,12 @@ export default function MentorRoomApp({ slug }) {
                     <div key={s.name} className="space-y-2">
                       <div className="flex justify-between items-center text-sm font-extrabold uppercase">
                         <span className="flex items-center gap-2">
-                          <span>👤</span> {s.name}
+                          <img
+                            src={getBackendUrl(`/api/media/${s.avatar || 'profil-1.webp'}`)}
+                            alt="Avatar"
+                            className="w-7 h-7 rounded-full border border-black object-cover bg-white"
+                          />
+                          {s.name}
                         </span>
                         <span className="text-xs">
                           {isDone ? (

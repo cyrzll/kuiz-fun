@@ -1,0 +1,10 @@
+---
+import Layout from '../../../../layouts/Layout.astro';
+import QuizEditApp from '../../../../components/QuizEditApp.jsx';
+
+const { id } = Astro.params;
+---
+
+<Layout>
+	{id && <QuizEditApp moduleId={id} client:load />}
+</Layout>

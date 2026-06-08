@@ -109,6 +109,7 @@ export async function initDb() {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       room_code TEXT NOT NULL,
       name TEXT NOT NULL,
+      avatar TEXT,
       score INTEGER DEFAULT 0,
       current_question_idx INTEGER DEFAULT 0,
       question_start_time INTEGER,
@@ -120,6 +121,17 @@ export async function initDb() {
       FOREIGN KEY (room_code) REFERENCES rooms(room_code)
     )
   `);
+
+  try {
+    const columns = await dbAll("PRAGMA table_info(students)");
+    const hasAvatar = columns.some((col: any) => col.name === 'avatar');
+    if (!hasAvatar) {
+      await dbRun("ALTER TABLE students ADD COLUMN avatar TEXT");
+      console.log("Added 'avatar' column to 'students' table.");
+    }
+  } catch (err) {
+    console.error("Error migrating students table:", err);
+  }
 
   await dbRun(`
     CREATE TABLE IF NOT EXISTS student_progress (

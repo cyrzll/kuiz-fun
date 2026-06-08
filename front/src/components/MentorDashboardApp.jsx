@@ -42,10 +42,7 @@ export default function MentorDashboardApp() {
   };
 
   const handleLaunchLobby = async (quiz) => {
-    let dbModulId = 'modul_pancasila_dasar';
-    if (quiz.id === '2') dbModulId = 'modul_gotong_royong';
-    else if (quiz.id === '3') dbModulId = 'modul_sejarah_pancasila';
-    else if (quiz.id === '4') dbModulId = 'modul_norma_hak_kewajiban';
+    const dbModulId = quiz.id;
 
     try {
       const res = await fetch(getBackendUrl('/api/rooms'), {
