@@ -20,7 +20,7 @@ initDb().then(() => {
 });
 
 // Configure CORS middleware
-app.use('/api/*', cors({
+app.use('*', cors({
   origin: '*',
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowHeaders: ['Content-Type', 'Authorization']
