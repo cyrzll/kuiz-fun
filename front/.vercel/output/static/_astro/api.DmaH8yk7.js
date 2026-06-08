@@ -1,1 +1,0 @@
-const l=(o,t=!1)=>{const n=t?"ws://localhost:3000":"https";return typeof window<"u"&&window.location.hostname!=="localhost"&&window.location.hostname!=="127.0.0.1"?n.replace("localhost",window.location.hostname)+o:`${n}${o}`};export{l as g};
