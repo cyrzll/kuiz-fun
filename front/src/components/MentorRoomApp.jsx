@@ -1,12 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import QuizLobby from './QuizLobby';
 import NeoModal from './NeoModal';
-
-const getBackendUrl = (path, isWs = false) => {
-  const host = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
-  const protocol = isWs ? 'ws' : 'http';
-  return `${protocol}://${host}:3000${path}`;
-};
+import { getBackendUrl } from '../utils/api';
 
 export default function MentorRoomApp({ slug }) {
   const [user, setUser] = useState(null);

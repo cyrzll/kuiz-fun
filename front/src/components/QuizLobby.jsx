@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
+import { getBackendUrl } from '../utils/api';
 
 const COLORS = [
   'bg-neo-yellow',
@@ -11,12 +12,6 @@ const COLORS = [
   'bg-purple-400 text-white',
   'bg-orange-400'
 ];
-
-const getBackendUrl = (path, isWs = false) => {
-  const host = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
-  const protocol = isWs ? 'ws' : 'http';
-  return `${protocol}://${host}:3000${path}`;
-};
 
 export default function QuizLobby({
   role,

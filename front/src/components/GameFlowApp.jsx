@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import QuizLobby from './QuizLobby';
 import NeoModal from './NeoModal';
+import { getBackendUrl } from '../utils/api';
 
 const COLORS = [
   'bg-neo-yellow',
@@ -12,12 +13,6 @@ const COLORS = [
   'bg-purple-400 text-white',
   'bg-orange-400'
 ];
-
-const getBackendUrl = (path, isWs = false) => {
-  const host = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
-  const protocol = isWs ? 'ws' : 'http';
-  return `${protocol}://${host}:3000${path}`;
-};
 
 export default function GameFlowApp({ slug }) {
   // Get room code from prop or query param
