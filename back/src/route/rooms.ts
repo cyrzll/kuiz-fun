@@ -147,4 +147,31 @@ router.get('/:code/students', async (c) => {
   }
 });
 
+// Delete a Room Session (and all associated student data)
+router.delete('/:code', async (c) => {
+  const code = c.req.param('code');
+  try {
+    const existing = await dbGet('SELECT 1 FROM rooms WHERE room_code = ?', [code]);
+    if (!existing) {
+      return c.json({ error: 'Sesi room tidak ditemukan' }, 404);
+    }
+
+    // 1. Delete student progress for all students in the room
+    await dbRun(`
+      DELETE FROM student_progress 
+      WHERE student_id IN (SELECT id FROM students WHERE room_code = ?)
+    `, [code]);
+
+    // 2. Delete students associated with this room code
+    await dbRun('DELETE FROM students WHERE room_code = ?', [code]);
+
+    // 3. Delete room session
+    await dbRun('DELETE FROM rooms WHERE room_code = ?', [code]);
+
+    return c.json({ success: true, message: 'Sesi kuis berhasil dihapus' });
+  } catch (err: any) {
+    return c.json({ error: err.message }, 500);
+  }
+});
+
 export default router;

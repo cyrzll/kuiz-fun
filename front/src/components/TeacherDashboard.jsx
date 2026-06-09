@@ -119,6 +119,49 @@ export default function TeacherDashboard({ user, onLogout, onLaunchLobby }) {
     });
   };
 
+  const handleDeleteRoom = (session) => {
+    showModal({
+      title: 'Hapus Sesi Kuis?',
+      message: `Apakah Anda yakin ingin menghapus sesi kuis dengan kode "${session.roomCode}" (${session.quizTitle})? Tindakan ini akan menghapus semua data pengerjaan siswa yang terhubung dengan sesi ini secara permanen.`,
+      type: 'warning',
+      icon: '🗑️',
+      confirmText: 'YA, HAPUS',
+      cancelText: 'BATAL',
+      onConfirm: async () => {
+        closeModal();
+        setLoading(true);
+        try {
+          const res = await fetch(getBackendUrl(`/api/rooms/${session.roomCode}`), {
+            method: 'DELETE'
+          });
+          const data = await res.json();
+          if (!res.ok || data.error) {
+            throw new Error(data.error || 'Gagal menghapus sesi kuis');
+          }
+          
+          showModal({
+            title: 'Sesi Dihapus',
+            message: 'Sesi kuis beserta seluruh data aktivitas siswa berhasil dihapus secara permanen.',
+            type: 'success',
+            icon: '✅'
+          });
+          
+          // Refresh lists and stats
+          await fetchData();
+        } catch (err) {
+          console.error(err);
+          showModal({
+            title: 'Gagal Menghapus Sesi',
+            message: err.message,
+            type: 'error',
+            icon: '❌'
+          });
+          setLoading(false);
+        }
+      }
+    });
+  };
+
   const toggleExpandRoom = (roomCode) => {
     setExpandedRooms(prev => ({
       ...prev,
@@ -376,6 +419,19 @@ export default function TeacherDashboard({ user, onLogout, onLaunchLobby }) {
                           🏁 Selesai: {totalFinished} dari {session.students.length}
                         </p>
                       </div>
+                      
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteRoom(session);
+                        }}
+                        className="neo-btn bg-neo-pink text-white p-2.5 text-xs font-black shadow-sm flex items-center justify-center"
+                        title="Hapus Sesi"
+                      >
+                        🗑️
+                      </button>
+
                       <span className="text-xl font-bold bg-gray-100 p-2 neo-border">
                         {isExpanded ? '▲' : '▼'}
                       </span>
