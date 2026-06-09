@@ -91,9 +91,22 @@ export default function TeacherDashboard({ user, onLogout, onLaunchLobby }) {
           const res = await fetch(getBackendUrl(`/api/modules/${quiz.id}`), {
             method: 'DELETE'
           });
+          if (!res.ok) {
+            let errMsg = 'Gagal menghapus kuis';
+            try {
+              const errData = await res.json();
+              errMsg = errData.error || errMsg;
+            } catch (_) {
+              try {
+                const text = await res.text();
+                if (text) errMsg = text;
+              } catch (_) {}
+            }
+            throw new Error(errMsg);
+          }
           const data = await res.json();
-          if (!res.ok || data.error) {
-            throw new Error(data.error || 'Gagal menghapus kuis');
+          if (data.error) {
+            throw new Error(data.error);
           }
           
           showModal({
@@ -134,9 +147,22 @@ export default function TeacherDashboard({ user, onLogout, onLaunchLobby }) {
           const res = await fetch(getBackendUrl(`/api/rooms/${session.roomCode}`), {
             method: 'DELETE'
           });
+          if (!res.ok) {
+            let errMsg = 'Gagal menghapus sesi kuis';
+            try {
+              const errData = await res.json();
+              errMsg = errData.error || errMsg;
+            } catch (_) {
+              try {
+                const text = await res.text();
+                if (text) errMsg = text;
+              } catch (_) {}
+            }
+            throw new Error(errMsg);
+          }
           const data = await res.json();
-          if (!res.ok || data.error) {
-            throw new Error(data.error || 'Gagal menghapus sesi kuis');
+          if (data.error) {
+            throw new Error(data.error);
           }
           
           showModal({
